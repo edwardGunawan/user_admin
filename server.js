@@ -1,69 +1,23 @@
-var express = require('express');
+const express = require('express');
+const app = express();
+const routes = require('./routes');
+var methodOverride = require('method-override');
+var bodyParser = require('body-parser');
 var PORT = process.env.PORT || 3000;
 var helmet = require('helmet');
-var _ = require('lodash');
-var app = express();
+var db = require('./models/db.js');
+
 
 app.use(helmet());
+app.use(bodyParser.urlencoded({extended:true}));
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
+app.use(methodOverride('_method'));
 
-/*
-  GET Index
-  frontpage
-*/
-app.get('/',async(req,res) => {
-  res.render('home');
-});
+app.use('/',routes);
 
-/*
-  GET/ NEW
-    New Form
-*/
-app.get('/new', async (req,res) => {
-  res.render('home');
-});
-
-/*
-  POST/ CREATE
-  create new form
-*/
-app.post('/new', async (req,res) => {
-  res.send('post form');
-});
-
-/*
-  GET/ SHOW
-  show confirmation on recently created user
-*/
-app.get('/:id', async (req,res) => {
-  res.send('confirmation page on create')
-});
-
-/*
-  GET/ EDIT
-  Show edit form
-*/
-app.get('/:id/edit', async(req, res) => {
-  res.send('edit form page');
-});
-
-/*
-  PUT/ UPDATE
-  post update and redirect
-*/
-app.put('/:id', async(req,res) => {
-  res.send('update page')
-});
-
-/*
-  DELETE/ DELETE
-  delete user and redirect
-*/
-app.delete('/:id', async(req, res) => {
-  res.send('delete page');
-});
-
-app.listen(PORT, () => {
-  console.log(`Listening to ${PORT}!`);
+db.sequelize.sync({force:true}).then(() => {
+  app.listen(PORT, () => {
+    console.log(`Listening to ${PORT}!`);
+  });  
 });
