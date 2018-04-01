@@ -1,3 +1,8 @@
 <% include partials/header %>
   Hello This is the frontpage
+  <ul>
+    <% profile.forEach(user => { %>
+      <li><%=user.id%>- <%= user.username %> <%= user.createdAt.toDateString() %></li>
+    <% }) %>
+  </ul>
 <% include partials/footer %>

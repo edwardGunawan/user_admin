@@ -1,14 +1,27 @@
 var express = require('express');
 var _ = require('lodash');
+var bodyParser = require('body-parser');
 var db = require('./../models/db.js');
 
+
+
+
 var routes = express.Router();
+// routes.use(bodyParser.urlencoded({extended:true}));
+
 /*
   GET Index
   frontpage
 */
 routes.get('/',async(req,res) => {
-  res.render('home');
+  try {
+    // get all the user and render it in home.ejs
+    const profile = await db.user.all();
+    // console.log(profile);
+    res.render('home', {profile:profile});
+  } catch (e) {
+    console.log(e.message);
+  }
 });
 
 /*
@@ -28,9 +41,9 @@ routes.post('/new', async (req,res) => {
     console.log(req.body);
     let newUser = _.pick(req.body,'username','password');
     const user = await db.user.create(newUser)
-    res.send(user);
-
+    res.redirect('/');
   }catch (e) {
+    res.status(500).render('error',{e:e});
     console.log(e.message);
   }
 
@@ -41,7 +54,14 @@ routes.post('/new', async (req,res) => {
   show confirmation on recently created user
 */
 routes.get('/:id', async (req,res) => {
-  res.send('confirmation page on create')
+  try {
+    console.log(req.params.id);
+    const userProfile = await db.user.findById(req.params.id);
+    res.render('user-profile',{userProfile:userProfile});
+  } catch(e) {
+    res.status(400).render('error',{e:e});
+  }
+
 });
 
 /*
@@ -49,7 +69,7 @@ routes.get('/:id', async (req,res) => {
   Show edit form
 */
 routes.get('/:id/edit', async(req, res) => {
-  res.send('edit form page');
+  res.send('show edit form page');
 });
 
 /*
@@ -57,7 +77,7 @@ routes.get('/:id/edit', async(req, res) => {
   post update and redirect
 */
 routes.put('/:id', async(req,res) => {
-  res.send('update page')
+  res.send('update page and redirect to Index')
 });
 
 /*
