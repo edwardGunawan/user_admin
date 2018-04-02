@@ -73,19 +73,34 @@ routes.get('/:id/edit', async(req, res) => {
 });
 
 /*
-  PUT/ UPDATE
+  PUT/ UPDATE (we don't need to update because )
   post update and redirect
 */
-routes.put('/:id', async(req,res) => {
-  res.send('update page and redirect to Index')
-});
+// routes.put('/:id', async(req,res) => {
+//   res.send('update page and redirect to Index')
+// });
 
 /*
   DELETE/ DELETE
   delete user and redirect
 */
 routes.delete('/:id', async(req, res) => {
-  res.send('delete page');
+  try {
+    // destroy user in database
+    const rowsDeleted = await db.user.destroy({where:{id : req.params.id}});
+    console.log(rowsDeleted);
+    if(rowsDeleted === 0) {
+      res.status(404).json({
+        error: `No user with the id ${req.params.id}`
+      });
+    } else {
+      res.status(204);
+      res.redirect('/');
+    }
+  } catch (e) {
+    res.status(500);
+    res.render('error',{e:e});
+  }
 });
 
 module.exports = routes;
