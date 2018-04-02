@@ -9,6 +9,7 @@ const sequelize = new Sequelize(undefined,undefined,undefined, {
 var db = {};
 
 db.user = sequelize.import('user.js');
+db.token = sequelize.import('token.js');
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

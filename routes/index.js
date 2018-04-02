@@ -3,11 +3,9 @@ var _ = require('lodash');
 var bodyParser = require('body-parser');
 var db = require('./../models/db.js');
 
-
-
-
 var routes = express.Router();
 // routes.use(bodyParser.urlencoded({extended:true}));
+
 
 /*
   GET Index
@@ -17,7 +15,6 @@ routes.get('/',async(req,res) => {
   try {
     // get all the user and render it in home.ejs
     const profile = await db.user.all();
-    // console.log(profile);
     res.render('home', {profile:profile});
   } catch (e) {
     console.log(e.message);
@@ -53,7 +50,7 @@ routes.post('/new', async (req,res) => {
   GET/ SHOW
   show confirmation on recently created user
 */
-routes.get('/:id', async (req,res) => {
+routes.get('/:id(\d+)', async (req,res) => { // requesting only number
   try {
     console.log(req.params.id);
     const userProfile = await db.user.findById(req.params.id);
@@ -68,7 +65,7 @@ routes.get('/:id', async (req,res) => {
   GET/ EDIT
   Show edit form
 */
-routes.get('/:id/edit', async(req, res) => {
+routes.get('/:id(\d+)/edit', async(req, res) => {
   res.send('show edit form page');
 });
 
@@ -84,7 +81,7 @@ routes.get('/:id/edit', async(req, res) => {
   DELETE/ DELETE
   delete user and redirect
 */
-routes.delete('/:id', async(req, res) => {
+routes.delete('/:id(\d+)', async(req, res) => {
   try {
     // destroy user in database
     const rowsDeleted = await db.user.destroy({where:{id : req.params.id}});
@@ -94,7 +91,6 @@ routes.delete('/:id', async(req, res) => {
         error: `No user with the id ${req.params.id}`
       });
     } else {
-      res.status(204);
       res.redirect('/');
     }
   } catch (e) {
