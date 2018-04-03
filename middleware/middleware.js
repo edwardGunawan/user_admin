@@ -11,12 +11,18 @@ module.exports = function(db){
     // set the user to req.user
     requireAuthenticate: (req,res,next) => {
       var token = req.get('Auth') || '';
-      console.log(`token for ${token}`);
-
-      db.token.findOne({where:cryptoJs.MD5(token).toString()})
+      console.log(`token : ${token}`);
+      console.log(`MD5 encrypted token ${cryptoJs.MD5(token).toString()}`);
+      let hashed = cryptoJs.MD5(token).toString();
+      db.token.findOne({
+        where: { // finding tokenHash and get the id of that tokenHash
+          tokenHash: hashed
+        }
+      })
       .then((tokenInstance) => {
+        console.log(tokenInstance);
         if(!tokenInstance) throw new Error();
-
+        console.log('go throug here');
         req.token = tokenInstance;
         return db.user.findByToken(token);
       })
@@ -24,7 +30,10 @@ module.exports = function(db){
         req.user = user; // set the request user so it is able to retrieve info later
         next();
       })
-      .catch(e => res.status(401).send());
+      .catch((e) => {
+        console.log(e);
+        res.status(401).send()
+      });
     }
   }
 

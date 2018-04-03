@@ -12,8 +12,9 @@ var routes = express.Router();
   GET Index
   frontpage
 */
-routes.get('/', async(req,res) => {
+routes.get('/',middleware.requireAuthenticate, async(req,res) => {
   try {
+    // console.log(req.user);
     // get all the user and render it in home.ejs
     const profile = await db.user.all();
     res.render('home', {profile:profile});
@@ -26,7 +27,7 @@ routes.get('/', async(req,res) => {
   GET/ NEW
     New Form
 */
-routes.get('/new', async (req,res) => {
+routes.get('/new',middleware.requireAuthenticate, async (req,res) => {
   res.render('new');
 });
 
@@ -51,7 +52,7 @@ routes.post('/new', async (req,res) => {
   GET/ SHOW
   show confirmation on recently created user
 */
-routes.get('/:id(\d+)', async (req,res) => { // requesting only number
+routes.get('/:id(\d+)',middleware.requireAuthenticate, async (req,res) => { // requesting only number
   try {
     console.log(req.params.id);
     const userProfile = await db.user.findById(req.params.id);
@@ -66,7 +67,7 @@ routes.get('/:id(\d+)', async (req,res) => { // requesting only number
   GET/ EDIT
   Show edit form
 */
-routes.get('/:id(\d+)/edit', async(req, res) => {
+routes.get('/:id(\d+)/edit',middleware.requireAuthenticate, async(req, res) => {
   res.send('show edit form page');
 });
 
@@ -82,7 +83,7 @@ routes.get('/:id(\d+)/edit', async(req, res) => {
   DELETE/ DELETE
   delete user and redirect
 */
-routes.delete('/:id(\d+)', async(req, res) => {
+routes.delete('/:id(\d+)',middleware.requireAuthenticate, async(req, res) => {
   try {
     // destroy user in database
     const rowsDeleted = await db.user.destroy({where:{id : req.params.id}});

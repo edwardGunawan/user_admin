@@ -87,7 +87,7 @@ module.exports = (sequelize, DataTypes) => {
         // convert to json
         let tokenData = JSON.parse(bytes.toString(cryptoJs.enc.Utf8));
 
-        // fin
+        // find tokenData id on the token db
         this.findById(tokenData.id).then((user) => {
           if(user) resolve(user);
           else reject() // if there is no users
