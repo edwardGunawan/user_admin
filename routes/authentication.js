@@ -12,14 +12,19 @@ routes.route('/')
   // POST login route authentication
   .post((req,res,next) => {
     let userInstance;
+    var body = _.pick(req.body,'username','password');
+    console.log(body);
+    // console.log(db.user);
     // once finish authenticating, getting email and password correct
     // generating token with JWT and and store it in the token db
     // generating jWT is through creating a type and then using
     // crypto to encrypt
-    db.user.authentication(req.body)
+    db.user.authenticate(body)
     .then((user) => {
-      let userInstance = user;
+      // console.log(` here in user ${user}`);
+      userInstance = user;
       let token = user.generateToken('authenticate');
+      console.log(token);
       // create token in token
       return db.token.create({token:token});
     })
@@ -27,7 +32,10 @@ routes.route('/')
       // set the token to the header and send the userInstance to the frontend
       res.header('Auth',tokenInstance.get('token')).json(userInstance.toPublicJSON());
     })
-    .catch(e => res.status(401).json(e));
+    .catch((e) => {
+      console.log(e);
+      res.status(401).json(e)
+    });
 
   })
   // DELETE Logout Delete token

@@ -2,6 +2,7 @@ var express = require('express');
 var _ = require('lodash');
 var bodyParser = require('body-parser');
 var db = require('./../models/db.js');
+var middleware = require('../middleware/middleware')(db);
 
 var routes = express.Router();
 // routes.use(bodyParser.urlencoded({extended:true}));
@@ -11,7 +12,7 @@ var routes = express.Router();
   GET Index
   frontpage
 */
-routes.get('/',async(req,res) => {
+routes.get('/', async(req,res) => {
   try {
     // get all the user and render it in home.ejs
     const profile = await db.user.all();

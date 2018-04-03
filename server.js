@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var PORT = process.env.PORT || 3000;
 var helmet = require('helmet');
 var db = require('./models/db.js');
-const middleware = require('./middleware/middleware');
+const middleware = require('./middleware/middleware')(db);
 
 
 app.use(helmet());

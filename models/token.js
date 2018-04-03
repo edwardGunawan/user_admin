@@ -17,4 +17,5 @@ module.exports = (sequelize, DataTypes) => {
     },
     tokenHash: DataTypes.STRING
   });
+  return token;
 }
