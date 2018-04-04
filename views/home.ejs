@@ -1,8 +1,21 @@
 <% include partials/header %>
-  Hello This is the frontpage
-  <ul>
+<div class="ui relaxed divided list">
+  <div class="item">
     <% profile.forEach(user => { %>
-      <li><%=user.id%>- <%= user.username %> <%= user.createdAt.toDateString() %></li>
+      <form action="/<%= user.id %>?_method=DELETE" method="POST">
+        <%=user.id%>
+        <div class="content">
+          <div class="header">
+            <%= user.username %>
+          </div>
+          <div class="description">
+            <%= user.createdAt.toDateString() %>
+          </div>
+          <button type="submit" class="ui button"> Delete Account </button>
+        </div>
+      </form>
     <% }) %>
-  </ul>
+  </div>
+</div>
+
 <% include partials/footer %>

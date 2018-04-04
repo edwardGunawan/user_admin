@@ -11,11 +11,11 @@ var db = require('./models/db.js');
 const middleware = require('./middleware/middleware')(db);
 
 
-app.use(helmet());
+// app.use(helmet());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json()); // postman post request is working
 app.set('view engine', 'ejs');
-app.use(express.static('public'));
+app.use(express.static(__dirname+'/public')); // setting the html root folder as public
 app.use(methodOverride('_method'));
 app.use(middleware.timeStamp);
 

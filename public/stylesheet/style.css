@@ -1,0 +1,15 @@
+.ui.card.login-container {
+  width:50%;
+  height:50%;
+  margin:auto;
+  margin-top:40px;
+}
+
+.ui.header {
+  text-align:center;
+}
+
+.buttons {
+  width:50%;
+  margin-left:40px;
+}

@@ -27,7 +27,7 @@ routes.get('/',middleware.requireAuthenticate, async(req,res) => {
   GET/ NEW
     New Form
 */
-routes.get('/new',middleware.requireAuthenticate, async (req,res) => {
+routes.get('/new', async (req,res) => {
   res.render('new');
 });
 
@@ -40,7 +40,7 @@ routes.post('/new', async (req,res) => {
     console.log(req.body);
     let newUser = _.pick(req.body,'username','password');
     const user = await db.user.create(newUser)
-    res.redirect('/');
+    res.redirect('/login');
   }catch (e) {
     res.status(500).render('error',{e:e});
     console.log(e.message);
@@ -52,24 +52,24 @@ routes.post('/new', async (req,res) => {
   GET/ SHOW
   show confirmation on recently created user
 */
-routes.get('/:id(\d+)',middleware.requireAuthenticate, async (req,res) => { // requesting only number
-  try {
-    console.log(req.params.id);
-    const userProfile = await db.user.findById(req.params.id);
-    res.render('user-profile',{userProfile:userProfile});
-  } catch(e) {
-    res.status(400).render('error',{e:e});
-  }
-
-});
+// routes.get('/:id(\d+)',middleware.requireAuthenticate, async (req,res) => { // requesting only number
+//   try {
+//     console.log(req.params.id);
+//     const userProfile = await db.user.findById(req.params.id);
+//     res.render('user-profile',{userProfile:userProfile});
+//   } catch(e) {
+//     res.status(400).render('error',{e:e});
+//   }
+//
+// });
 
 /*
   GET/ EDIT
   Show edit form
 */
-routes.get('/:id(\d+)/edit',middleware.requireAuthenticate, async(req, res) => {
-  res.send('show edit form page');
-});
+// routes.get('/:id(\d+)/edit',middleware.requireAuthenticate, async(req, res) => {
+//   res.send('show edit form page');
+// });
 
 /*
   PUT/ UPDATE (we don't need to update because )

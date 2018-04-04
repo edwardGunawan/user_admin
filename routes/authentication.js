@@ -8,7 +8,7 @@ var routes = express.Router();
 routes.route('/')
   // GET Login page form
   .get((req,res,next) => {
-    res.send('login page');
+    res.render('login');
   })
   // POST login route authentication
   .post((req,res,next) => {
@@ -32,7 +32,8 @@ routes.route('/')
     .then((tokenInstance) => {
       // console.log(tokenInstance);
       // set the token to the header and send the userInstance to the frontend
-      res.header('Auth',tokenInstance.get('token')).json(userInstance.toPublicJSON());
+      // res.header('Auth',tokenInstance.get('token')).json(userInstance.toPublicJSON());
+      res.header('Auth', tokenInstance.get('token')).redirect('/');
     })
     .catch((e) => {
       console.log(e);
