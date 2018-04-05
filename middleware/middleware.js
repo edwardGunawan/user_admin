@@ -10,7 +10,8 @@ module.exports = function(db){
     // from tokenInstance get the user by findByToken instanceMethods
     // set the user to req.user
     requireAuthenticate: (req,res,next) => {
-      var token = req.get('Auth') || '';
+      // getting token from localStorage
+      var token = db.localStorage.getItem('Auth') || ''; //req.get('Auth') || '';
       console.log(`token : ${token}`);
       console.log(`MD5 encrypted token ${cryptoJs.MD5(token).toString()}`);
       let hashed = cryptoJs.MD5(token).toString();
@@ -22,7 +23,7 @@ module.exports = function(db){
       .then((tokenInstance) => {
         console.log(tokenInstance);
         if(!tokenInstance) throw new Error();
-        console.log('go throug here');
+        // console.log('go throug here');
         req.token = tokenInstance;
         return db.user.findByToken(token);
       })
@@ -32,7 +33,7 @@ module.exports = function(db){
       })
       .catch((e) => {
         console.log(e);
-        res.status(401).send()
+        res.redirect(401,'/login')
       });
     }
   }

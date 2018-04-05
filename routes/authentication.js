@@ -25,15 +25,20 @@ routes.route('/')
       // console.log(` here in user ${user}`);
       userInstance = user;
       let token = user.generateToken('authenticate');
-      console.log(token);
+      console.log(`geenerate token in login ${token}`);
       // create token in token db
       return db.token.create({token:token});
     })
     .then((tokenInstance) => {
       // console.log(tokenInstance);
       // set the token to the header and send the userInstance to the frontend
+      // setting token on header and redirect doesn't work in node, store in localStorage and
+      // send it as a header in API request
       // res.header('Auth',tokenInstance.get('token')).json(userInstance.toPublicJSON());
-      res.header('Auth', tokenInstance.get('token')).redirect('/');
+
+      db.localStorage.setItem('Auth',tokenInstance.get('token'));
+      // console.log('localstorage',localStorage.getItem('Auth'));
+      res.redirect(302,'/');
     })
     .catch((e) => {
       console.log(e);
@@ -44,8 +49,10 @@ routes.route('/')
 
   // DELETE Logout Delete token in the token db and redirect to login page
   routes.delete('/',middleware.requireAuthenticate,(req,res) => {
-    req.token.destroy().then(() => res.redirect('/login'))
-    .catch((e) => {
+    req.token.destroy().then(() => {
+      db.localStorage.removeItem('Auth'); // remove token from localStorage
+      res.redirect('/login')
+    }).catch((e) => {
       console.log(e);
       res.status(500).send()
     });

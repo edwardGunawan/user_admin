@@ -1,15 +1,34 @@
-.ui.card.login-container {
+* {
+  padding:0;
+  margin:0;
+}
+
+footer {
   width:50%;
+  margin-top:50px;
+}
+.ui.card.login-container {
   height:50%;
+  margin-top:40px !important;
+  display:flex;
+  /* justify-content: center; */ /* this align item vertically */
+  align-items: center;
   margin:auto;
-  margin-top:40px;
+  padding-top:30px;
 }
 
 .ui.header {
   text-align:center;
 }
 
-.buttons {
-  width:50%;
-  margin-left:40px;
+.form-container{
+  width:80%;
+  margin-top:40px !important;
+  margin:auto;
+}
+
+.list-container {
+  width:90%;
+  margin-top:40px !important;
+  margin-left:50px !important;
 }

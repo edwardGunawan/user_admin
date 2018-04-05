@@ -1,21 +1,23 @@
 <% include partials/header %>
-<div class="ui relaxed divided list">
-  <div class="item">
-    <% profile.forEach(user => { %>
-      <form action="/<%= user.id %>?_method=DELETE" method="POST">
-        <%=user.id%>
-        <div class="content">
-          <div class="header">
-            <%= user.username %>
-          </div>
-          <div class="description">
-            <%= user.createdAt.toDateString() %>
-          </div>
+<div class="ui relaxed divided list list-container">
+  <% profile.forEach(user => { %>
+    <div class="item">
+      <i class="large user middle aligned icon"></i>
+      <div class="content">
+        <div class="header"> <%= user.username %> </div>
+        <div class="description">
+          Created at <%= user.createdAt.toDateString() %>
+          <!-- <form action="/<%= user.id %>?_method=DELETE" method="POST">
           <button type="submit" class="ui button"> Delete Account </button>
+          </form> -->
         </div>
-      </form>
-    <% }) %>
-  </div>
+      </div>
+    </div>
+  <% }) %>
+
+  <form action="/login?_method=DELETE" method="POST">
+    <button type="submit" class="ui button"> Logout </button>
+  </form>
 </div>
 
 <% include partials/footer %>
